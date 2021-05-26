@@ -1,9 +1,3 @@
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class Calculation {
 
@@ -29,16 +23,5 @@ public class Calculation {
         }catch (NumberFormatException exception){
             return "Number Format Exception";
         }
-    }
-
-    public static void fromFile(String srcFile, String dstFile) throws IOException {
-        List<String> commandsAndValues = Files.readAllLines(Paths.get(srcFile));
-        List<String> results = commandsAndValues.stream().map(Calculation::fromStringLine).collect(Collectors.toList());
-
-        FileWriter writer = new FileWriter(dstFile);
-        for(String result: results) {
-            writer.write(result + System.lineSeparator());
-        }
-        writer.close();
     }
 }
