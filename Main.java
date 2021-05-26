@@ -14,10 +14,9 @@ public class Main {
 
         if (!(args.length == 2)){
             System.out.println("Wrong input data, try restart the app.");
-        }
-
+        } else {
             try {
-            switch (Verification.findOutOperatingMode(args)) {
+                switch (Verification.findOutOperatingMode(args)) {
                     case CONSOLE:
                         workWithConsole();
                         break;
@@ -27,9 +26,10 @@ public class Main {
                     default:
                         System.out.println("Wrong input data, try restart the app.");
                 }
-            }catch (IOException e){
+            } catch (IOException e) {
                 System.out.println(e.getMessage());
             }
+        }
     }
 
     private static void workWithFiles(String srcStringFile, String dstStringFile) {
