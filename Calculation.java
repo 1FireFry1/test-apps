@@ -1,27 +1,74 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Calculation {
 
     public static String fromStringLine(String string){
-        String[] data = string.split("\\s+");
-        String[] stringsNumbers = new String[data.length - 1];
-        System.arraycopy(data, 1, stringsNumbers, 0, stringsNumbers.length);
+        List<List<String>> toDo = whatToDo(string);
+        String result = "";
 
-        try {
-            switch (Verification.findOutCommands(data[0])) {
-                case ADD:
-
-                    return String.valueOf(Calculator.add(stringsNumbers));
-                case MUL:
-                    return String.valueOf(Calculator.mul(stringsNumbers));
-                case MUL_TWO_ADD_THIRD:
-                    return String.valueOf(Calculator.mulTwoAddThird(stringsNumbers[0], stringsNumbers[1], stringsNumbers[2]));
-                case NOT_MATCH_ANY_COMMAND:
-                    return "Wrong command";
-                default:
-                    return "0";
-            }
-        }catch (NumberFormatException exception){
-            return "Number Format Exception";
+        if (toDo == null){
+            return "Incorrect  content";
         }
+        for (List<String> strings : toDo) {
+            List<String> listForCalculation = strings.stream().skip(1).collect(Collectors.toList());
+            listForCalculation.add(0, result);
+            listForCalculation.removeAll(Arrays.asList(null,""));
+            try {
+                switch (Verification.findOutCommands(strings.get(0))) {
+                    case ADD:
+                        result = String.valueOf(Calculator.add(listForCalculation));
+                        break;
+                    case MUL:
+                        result = String.valueOf(Calculator.mul(listForCalculation));
+                        break;
+                    case SUB:
+                        result = String.valueOf(Calculator.sub(listForCalculation));
+                        break;
+                    case DIV:
+                        result = String.valueOf(Calculator.div(listForCalculation));
+                        break;
+                    default:
+                        return "default 0";
+                }
+            } catch (NumberFormatException exception) {
+                return "Number Format Exception";
+            } catch (ArithmeticException exception){
+                return "Warning! Division on zero!";
+            }
+        }
+        return result;
+    }
+
+    private static List<List<String>> whatToDo(String string){
+        String[] data = string.split("\\s+");
+
+        List<List<String>> toDo = new ArrayList<>();
+        List<String> listCommandsNumbers = null;
+
+        for (int i = 0; i < data.length; i++){
+            if (i == 0 && !Verification.isCommands(data[0])){
+                return null;
+            } else if (Verification.isCommands(data[i])){
+                listCommandsNumbers = new ArrayList<>();
+                listCommandsNumbers.add(data[i]);
+                toDo.add(listCommandsNumbers);
+            } else if (Verification.isNumbers(data[i])){
+                listCommandsNumbers.add(data[i].trim().replace("\\D",""));
+            } else {
+                return null;
+            }
+        }
+        if (toDo.get(0).size() < 3){
+            return null;
+        }
+        for (int i = 1; i < toDo.size(); i++){
+            if (toDo.get(i).size() < 2){
+                return null;
+            }
+        }
+        return toDo;
     }
 }

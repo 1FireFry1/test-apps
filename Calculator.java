@@ -1,15 +1,20 @@
-import java.util.Arrays;
+import java.util.List;
 
 public class Calculator {
-    public static int add(String[] stringNumbers) throws NumberFormatException{
-        return Arrays.stream(stringNumbers).mapToInt(Integer::parseInt).sum();
+    public static int add(List<String> listForCalculation) throws NumberFormatException{
+        return listForCalculation.stream().mapToInt(Integer::parseInt).sum();
     }
 
-    public static int mul(String[] stringNumbers) throws NumberFormatException{
-        return Arrays.stream(stringNumbers).mapToInt(Integer::parseInt).reduce((i1, i2) -> i1 * i2).orElse(0);
+    public static int mul(List<String> listForCalculation) throws NumberFormatException{
+        return listForCalculation.stream().mapToInt(Integer::parseInt).reduce((i1, i2) -> i1 * i2).orElse(0);
     }
 
-    public static int mulTwoAddThird(String firstNumber, String secondNumber, String thirdNumber) throws NumberFormatException{
-        return Integer.parseInt(firstNumber) * Integer.parseInt(secondNumber) + Integer.parseInt(thirdNumber);
+    public static int sub(List<String> listForCalculation) throws NumberFormatException{
+        return listForCalculation.stream().mapToInt(Integer::parseInt).reduce((i1, i2) -> i1 - i2).orElse(0);
+    }
+
+    public static int div(List<String> listForCalculation) throws NumberFormatException, ArithmeticException{
+        return listForCalculation.stream().mapToInt(Integer::parseInt).reduce((i1, i2) -> i1 / i2).orElse(0);
+
     }
 }

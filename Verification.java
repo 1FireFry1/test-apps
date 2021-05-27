@@ -25,17 +25,34 @@ public class Verification {
     }
 
     public static Commands findOutCommands(String data) {
-        Pattern pattern = Pattern.compile("(?<add>add)|(?<mul>mul)|(?<mulTwoAddThird>multwoaddthird)");
+        Pattern pattern = Pattern.compile("(?<add>add)|(?<mul>mul)|(?<sub>sub)|(?<div>div)");
         Matcher matcher = pattern.matcher(data.toLowerCase());
+
         if (!matcher.matches()){
             return Commands.NOT_MATCH_ANY_COMMAND;
         }
+
         if (!(matcher.group("add") == null)){
             return Commands.ADD;
         }
         if (!(matcher.group("mul") == null)){
             return Commands.MUL;
         }
-        return Commands.MUL_TWO_ADD_THIRD;
+        if (!(matcher.group("sub") == null)){
+            return Commands.SUB;
+        }
+        return Commands.DIV;
+    }
+
+    public static boolean isCommands(String string) {
+        Pattern pattern = Pattern.compile("(add)|(mul)|(sub)|(div)");
+        Matcher matcher = pattern.matcher(string.toLowerCase().trim());
+        return matcher.matches();
+    }
+
+    public static boolean isNumbers(String string) {
+        Pattern pattern = Pattern.compile("\\d+");
+        Matcher matcher = pattern.matcher(string.toLowerCase());
+        return matcher.matches();
     }
 }
